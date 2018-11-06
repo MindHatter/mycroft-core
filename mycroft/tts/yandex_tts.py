@@ -12,10 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-from gtts import gTTS
-
+from mycroft.configuration import Configuration
 from mycroft.tts import TTS, TTSValidator
-from yandex_speech import TTS as YandexTTS
+from yandex_speech import TTS as yaTTS
 
 class YandexTTS(TTS):
     def __init__(self, lang, config):
@@ -24,7 +23,7 @@ class YandexTTS(TTS):
 
     def get_tts(self, sentence, wav_file):
         print('YandexTTS: '+sentence)
-        tts = YandexTTS(self.voice, "wav", self.config.get("token"))
+        tts = yaTTS(self.voice, "wav", self.config.get("token"))
         tts.generate(sentence)
         tts.save(path=wav_file)
 
@@ -41,7 +40,14 @@ class YandexTTSValidator(TTSValidator):
 
     def validate_connection(self):
         try:
-            gTTS(text='123').save(self.tts.filename)
+            config = Configuration.get()
+            tts = YandexTTS('ru-RU', config)
+            tts.get_tts('Привет', tts.filename)
+            import os.path
+            if os.path.isfile(tts.filename):
+                return True
+            else:
+                return False
         except:
             raise Exception(
                 'YandexTTS server could not be verified. Please check your '

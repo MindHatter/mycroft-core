@@ -29,6 +29,7 @@ from mycroft.enclosure.api import EnclosureAPI
 from mycroft.configuration import Configuration
 from mycroft.messagebus.message import Message
 from mycroft.metrics import report_timing, Stopwatch
+from mycroft.metrics import report_timing, Stopwatch
 from mycroft.util import (
     play_wav, play_mp3, check_for_signal, create_signal, resolve_resource_file
 )
@@ -444,6 +445,7 @@ class TTSFactory(object):
     from mycroft.tts.ibm_tts import WatsonTTS
     from mycroft.tts.responsive_voice_tts import ResponsiveVoice
     from mycroft.tts.mimic2_tts import Mimic2
+    from mycroft.tts.yandex_tts import YandexTTS
 
     CLASSES = {
         "mimic": Mimic,
@@ -455,7 +457,8 @@ class TTSFactory(object):
         "spdsay": SpdSay,
         "watson": WatsonTTS,
         "bing": BingTTS,
-        "responsive_voice": ResponsiveVoice
+        "responsive_voice": ResponsiveVoice,
+        "yandex": YandexTTS
     }
 
     @staticmethod
