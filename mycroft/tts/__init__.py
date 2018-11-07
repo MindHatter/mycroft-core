@@ -300,6 +300,7 @@ class TTS(object):
                 sentence:   Sentence to be spoken
                 ident:      Id reference to current interaction
         """
+        LOG.debug("TTS try to say " + sentence)
         sentence = self.validate_ssml(sentence)
 
         create_signal("isSpeaking")
@@ -403,6 +404,7 @@ class TTSValidator(object):
         self.validate_filename()
         self.validate_lang()
         self.validate_connection()
+        LOG.debug('Validate TTS OK')
 
     def validate_dependencies(self):
         pass
@@ -475,9 +477,10 @@ class TTSFactory(object):
         """
         config = Configuration.get()
         lang = config.get("lang", "en-us")
-        tts_module = config.get('tts', {}).get('module', 'mimic')
+        tts_module = 'yandex'#config.get('tts').get('module', 'yandex')
         tts_config = config.get('tts', {}).get(tts_module, {})
         tts_lang = tts_config.get('lang', lang)
+        LOG.debug('Init TTS:'+tts_module+'; '+tts_lang)
         clazz = TTSFactory.CLASSES.get(tts_module)
         tts = clazz(tts_lang, tts_config)
         tts.validator.validate()
