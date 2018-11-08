@@ -37,3 +37,5 @@ petact==0.1.2
 
 # mm
 yandex_speech
+
+pymystem3==0.2.0

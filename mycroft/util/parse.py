@@ -28,6 +28,7 @@ from mycroft.util.lang.parse_de import normalize_de
 from mycroft.util.lang.parse_fr import extractnumber_fr
 from mycroft.util.lang.parse_fr import extract_datetime_fr
 from mycroft.util.lang.parse_fr import normalize_fr
+from mycroft.util.lang.parse_ru import extract_datetime_ru
 
 from mycroft.util.lang.parse_common import *
 from .log import LOG
@@ -180,6 +181,8 @@ def extract_datetime(text, anchorDate=None, lang="en-us", default_time=None):
         return extract_datetime_sv(text, anchorDate, default_time)
     elif lang_lower.startswith("de"):
         return extract_datetime_de(text, anchorDate, default_time)
+    elif lang_lower.startswith("ru"):
+        return extract_datetime_ru(text, anchorDate, default_time)
     # TODO: extract_datetime for other languages
     LOG.warning('Language "{}" not recognized! Please make sure your '
                 'language is one of the following: '
