@@ -15,6 +15,7 @@
 from mycroft.configuration import Configuration
 from mycroft.tts import TTS, TTSValidator
 from yandex_speech import TTS as yaTTS
+from mycroft.util.log import LOG
 
 class YandexTTS(TTS):
     def __init__(self, lang, config):
@@ -22,11 +23,12 @@ class YandexTTS(TTS):
             self), 'wav')
 
     def get_tts(self, sentence, wav_file):
+        LOG.debug('Yandex TTS: try to make speech "'+sentence+'"')
         print('YandexTTS: '+sentence)
         tts = yaTTS(self.voice, "wav", self.config.get("token"))
         tts.generate(sentence)
         tts.save(path=wav_file)
-
+        LOG.debug('Yandex TTS: speech result in "' + wav_file + '"')
         return (wav_file, None)  # No phonemes
 
 
