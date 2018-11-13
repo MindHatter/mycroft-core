@@ -32,7 +32,7 @@ padaos==0.1.7
 precise-runner==0.2.1
 petact==0.1.2
 
-# dev setup tools
+# dev setup toolsF
 # pep8==1.7.0
 
 # mm
