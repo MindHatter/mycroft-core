@@ -222,7 +222,7 @@ def extract_datetime_ru(string, dateNow, default_time):
                 used += 1
                 start -= 1
         # parse Weekend
-        elif word in "выходные":
+        elif word.startswith("выходны"):
             d = days.index("субботу")
             dayOffset = (d + 1) - int(today)
             used = 1
