@@ -171,7 +171,9 @@ class AudioConsumer(Thread):
         except HTTPError as e:
             if e.response.status_code == 401:
                 LOG.warning("Access Denied at mycroft.ai")
-                return "pair my device"  # phrase to start the pairing process
+                #return "pair my device"  # phrase to start the pairing process
+                # not pair with home!
+                return ""
             else:
                 LOG.error(e.__class__.__name__ + ': ' + str(e))
         except RequestException as e:
