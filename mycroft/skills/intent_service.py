@@ -294,6 +294,7 @@ class IntentService(object):
         Args:
             message (Message): The messagebus data
         """
+        LOG.debug('Handle message: '+str(message))
         try:
             # Get language of the utterance
             lang = message.data.get('lang', "en-us")
@@ -303,10 +304,11 @@ class IntentService(object):
             with stopwatch:
                 # Give active skills an opportunity to handle the utterance
                 converse = self._converse(utterances, lang)
-
+                LOG.debug('Active skills converse: ' + str(converse))
                 if not converse:
                     # No conversation, use intent system to handle utterance
                     intent = self._adapt_intent_match(utterances, lang)
+                    LOG.debug('Not converce. Intent: ' + str(intent))
                     padatious_intent = PadatiousService.instance.calc_intent(
                                         utterances[0])
 
