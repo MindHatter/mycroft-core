@@ -269,15 +269,17 @@ echo "Building with $CORES cores."
 #build and install pocketsphinx
 #cd ${TOP}
 #${TOP}/scripts/install-pocketsphinx.sh -q
-#build and install mimic
-cd "${TOP}"
 
-if [[ "$build_mimic" == "y" ]] || [[ "$build_mimic" == "Y" ]] ; then
-    echo "WARNING: The following can take a long time to run!"
-    "${TOP}/scripts/install-mimic.sh" " ${CORES}"
-else
-    echo "Skipping mimic build."
-fi
+#build and install mimic
+
+#cd "${TOP}"
+# mimiс не нужен!
+#if [[ "$build_mimic" == "y" ]] || [[ "$build_mimic" == "Y" ]] ; then
+#    echo "WARNING: The following can take a long time to run!"
+#    "${TOP}/scripts/install-mimic.sh" " ${CORES}"
+#else
+#    echo "Skipping mimic build."
+#fi
 
 # set permissions for common scripts
 chmod +x start-mycroft.sh

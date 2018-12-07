@@ -124,22 +124,23 @@ def check_connection():
             time.sleep(0.5)
 
         bus.emit(Message('mycroft.internet.connected'))
+        # не вызываем проверку на регистрацию в home!!
         # check for pairing, if not automatically start pairing
-        try:
-            if not is_paired(ignore_errors=False):
-                payload = {
-                    'utterances': ["pair my device"],
-                    'lang': "en-us"
-                }
-                bus.emit(Message("recognizer_loop:utterance", payload))
-            else:
-                from mycroft.api import DeviceApi
-                api = DeviceApi()
-                api.update_version()
-        except BackendDown:
-            data = {'utterance': dialog.get("backend.down")}
-            bus.emit(Message("speak", data))
-            bus.emit(Message("backend.down"))
+        # try:
+        #     if not is_paired(ignore_errors=False):
+        #         payload = {
+        #             'utterances': ["pair my device"],
+        #             'lang': "en-us"
+        #         }
+        #         bus.emit(Message("recognizer_loop:utterance", payload))
+        #     else:
+        #         from mycroft.api import DeviceApi
+        #         api = DeviceApi()
+        #         api.update_version()
+        # except BackendDown:
+        #     data = {'utterance': dialog.get("backend.down")}
+        #     bus.emit(Message("speak", data))
+        #     bus.emit(Message("backend.down"))
 
     else:
         thread = Timer(1, check_connection)

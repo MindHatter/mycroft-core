@@ -22,6 +22,7 @@ from mycroft.util.lang.format_de import nice_time_de
 from mycroft.util.lang.format_de import pronounce_number_de
 from mycroft.util.lang.format_fr import nice_number_fr
 from mycroft.util.lang.format_fr import nice_time_fr
+from mycroft.util.lang.format_ru import nice_time_ru
 from mycroft.util.lang.format_fr import pronounce_number_fr
 
 from collections import namedtuple
@@ -251,6 +252,8 @@ def nice_time(dt, lang="en-us", speech=True, use_24hour=False,
         return nice_time_fr(dt, speech, use_24hour, use_ampm)
     elif lang_lower.startswith("de"):
         return nice_time_de(dt, speech, use_24hour, use_ampm)
+    elif lang_lower.startswith("ru"):
+        return nice_time_ru(dt, speech, use_24hour, use_ampm)
 
     # TODO: Other languages
     return str(dt)

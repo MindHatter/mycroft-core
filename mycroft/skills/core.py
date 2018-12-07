@@ -1052,7 +1052,10 @@ class MycroftSkill(object):
         self.enclosure.register(self.name)
         data = {'utterance': utterance,
                 'expect_response': expect_response}
+        if len(utterance) == 0:
+            data['utterance'] = "Что-то пошло не так. Повторите вопрос чуть позже"
         message = dig_for_message()
+       
         if message:
             self.bus.emit(message.reply("speak", data))
         else:
