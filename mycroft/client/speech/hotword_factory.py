@@ -227,7 +227,7 @@ class SnowboyHotWord(HotWordEngine):
     def __init__(self, key_phrase="hey mycroft", config=None, lang="en-us"):
         super(SnowboyHotWord, self).__init__(key_phrase, config, lang)
         # Hotword module imports
-        from snowboydecoder import HotwordDetector
+        from snowboy_ubuntu.snowboydecoder import HotwordDetector
         # Hotword module config
         module = self.config.get("module")
         if module != "snowboy":
