@@ -222,6 +222,25 @@ class GoVivaceSTT(TokenSTT):
         return response.json()["result"]["hypotheses"][0]["transcript"]
 
 
+class AbkSTT(TokenSTT):
+    def __init__(self):
+        super(AbkSTT, self).__init__()
+
+    def execute(self, language=None):
+        file = '1.wav'
+        audio = self.record_audio_data(file)
+        self.lang = language or self.lang
+        import requests
+
+        binary_audio_data = open(audio, 'rb').read()
+        abk_url = '***'
+        r = requests.post(abk_url+'/stt',
+                          data=binary_audio_data,
+                          headers={'Content-type': 'audio/wav'})
+        print(r.json())
+        return r.json()
+
+
 class STTFactory(object):
     CLASSES = {
         "mycroft": MycroftSTT,
@@ -234,7 +253,8 @@ class STTFactory(object):
         "govivace": GoVivaceSTT,
         "houndify": HoundifySTT,
         "deepspeech_server": DeepSpeechServerSTT,
-        "mycroft_deepspeech": MycroftDeepSpeechSTT
+        "mycroft_deepspeech": MycroftDeepSpeechSTT,
+        "abk": AbkSTT
     }
 
     @staticmethod
