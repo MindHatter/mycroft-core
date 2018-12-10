@@ -2,7 +2,10 @@
 
 import collections
 import pyaudio
-import snowboydetect
+try:
+    import mycroft.client.speech.snowboy_ubuntu.snowboydetect as snowboydetect
+except:
+    import snowboydetect
 import time
 import wave
 import os

@@ -224,10 +224,10 @@ class PreciseHotword(HotWordEngine):
 
 
 class SnowboyHotWord(HotWordEngine):
-    def __init__(self, key_phrase="hey mycroft", config=None, lang="en-us"):
+    def __init__(self, key_phrase="окей ника", config=None, lang="en-us"):
         super(SnowboyHotWord, self).__init__(key_phrase, config, lang)
         # Hotword module imports
-        from snowboy_ubuntu.snowboydecoder import HotwordDetector
+        from mycroft.client.speech.snowboy_ubuntu.snowboydecoder import HotwordDetector
         # Hotword module config
         module = self.config.get("module")
         if module != "snowboy":
@@ -239,8 +239,11 @@ class SnowboyHotWord(HotWordEngine):
         for key in models:
             paths.append(models[key])
         sensitivity = self.config.get("sensitivity", 0.5)
-        self.snowboy = HotwordDetector(paths,
-                                       sensitivity=[sensitivity] * len(paths))
+        model_name = self.config.get("model_path", "ОКЕЙ_НИКА.pmdl")
+        this_path = os.path.dirname(os.path.realpath(__file__))
+        model_path = this_path+'/snowboy_ubuntu/resources/'+model_name
+        self.snowboy = HotwordDetector(model_path,
+                                       sensitivity=0.5)
         self.lang = str(lang).lower()
         self.key_phrase = str(key_phrase).lower()
 
