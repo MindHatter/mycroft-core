@@ -64,6 +64,7 @@ function name-to-script-path() {
         "audio")             _module="mycroft.audio" ;;
         "voice")             _module="mycroft.client.speech" ;;
         "cli")               _module="mycroft.client.text" ;;
+        "screendialog")      _module="mycroft.client.screen_dialog" ;;
         "audiotest")         _module="mycroft.util.audio_test" ;;
         "audioaccuracytest") _module="mycroft.audio-accuracy-test" ;;
         "enclosure")         _module="mycroft.client.enclosure" ;;
@@ -191,6 +192,11 @@ case ${_opt} in
     "debug")
         launch-all
         launch-process cli
+        ;;
+
+    "screendialog")
+        launch-all
+        launch-process screendialog
         ;;
 
     "cli")
