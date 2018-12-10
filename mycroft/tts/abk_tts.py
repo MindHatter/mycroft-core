@@ -1,6 +1,6 @@
-from voice_butler.configuration import Configuration
-from voice_butler.tts import TTS, TTSValidator
-from voice_butler.util.log import LOG
+from mycroft.configuration import Configuration
+from mycroft.tts import TTS, TTSValidator
+from mycroft.util.log import LOG
 
 class AbkTTS(TTS):
     def __init__(self, lang, config):
