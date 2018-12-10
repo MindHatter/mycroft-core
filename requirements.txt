@@ -36,4 +36,4 @@ petact==0.1.2
 # pep8==1.7.0
 
 # mm
-yandex_speech
+pygame
