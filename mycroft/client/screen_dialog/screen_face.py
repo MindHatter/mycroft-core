@@ -2,7 +2,7 @@ import os
 import time
 
 import pygame
-from pygame.rect import Rect
+
 
 
 class ScreenFace():
@@ -20,6 +20,16 @@ class ScreenFace():
         directory=os.path.dirname(os.path.realpath(__file__))
         #self.avatar = pygame.image.load(directory+'/gorodgeroev.jpg')
         self.clock=pygame.time.Clock()
+        self.font = pygame.font.Font(directory+'/12890.otf', 90)
+        os.environ["SDL_VIDEODRIVER"] = "x11"
+
+    def contunue_game_loop(self):
+        while True:
+            try:
+                self.refresh()
+                time.sleep(0.2)
+            except KeyboardInterrupt as e:
+                self.close_window()
 
     def set_question(self, text):
         self.question = text
@@ -39,16 +49,15 @@ class ScreenFace():
                 self.close_window()
 
         # Тут можно рисовать
-        fontObj = pygame.font.Font('./12890.otf', 90)
         green = (0, 128, 0)   # зеленый
         white = (255, 255, 255)   # белый
 
         self.screen.fill(white)
         #self.screen.blit(self.avatar, (1, 1))
         # set_question
-        self.blit_text(self.screen, self.question, (100, 100), fontObj,green)
+        self.blit_text(self.screen, self.question, (100, 100), self.font, green)
         # set_answer
-        self.blit_text(self.screen, self.answer, (100, 250), fontObj, green)
+        self.blit_text(self.screen, self.answer, (100, 250), self.font, green)
 
         # Рисунок появится после обновления экрана
         pygame.display.flip()
@@ -79,10 +88,13 @@ class ScreenFace():
 
 if __name__ == '__main__':
     lb=ScreenFace()
-    for i in range(5):
+    #3for i in range(5):
+    def go():
         lb.set_question('Привет, Ника')
         lb.set_answer('Привет, кожанный')
         lb.refresh()
-        time.sleep(10)
+    go()
+    lb.contunue_game_loop()
+    #time.sleep(1)
 
-    lb.close_window()
+    #lb.close_window()

@@ -1,8 +1,6 @@
 import sys
 from mycroft.tts import TTS
 
-import os
-import os.path
 import time
 from threading import Thread, Lock
 from mycroft.messagebus.client.ws import WebsocketClient
@@ -10,54 +8,58 @@ from mycroft.util.log import LOG
 
 
 def handle_speak(event):
+    pass
     global screen
     utterance = event.data.get('utterance')
     utterance = TTS.remove_ssml(utterance)
-    screen.set_question(utterance)
-    screen.refresh()
+    with open('answer', 'w') as file:
+        file.write(utterance)
+    ##screen.set_question(utterance)
+    #screen.refresh()
 
 def handle_utterance(event):
+    pass
     global screen
     utterance = event.data.get('utterances')[0]
-    screen.set_answer(utterance)
-    screen.refresh()
+    with open('question', 'w') as file:
+        file.write(utterance)
+    #screen.set_answer(utterance)
+    #screen.refresh()
 
 
 def handle_message(event):
     pass
 
 
-from mycroft.client.screen_dialog.screen_face import ScreenFace
+#from mycroft.client.screen_dialog.screen_face import ScreenFace
 screen = None
+i=0
 
 class LogMonitorThread(Thread):
     def __init__(self):
         global screen
         Thread.__init__(self)
-        screen = ScreenFace()
-        bus = WebsocketClient()  # Mycroft messagebus connection
-        bus.on('speak', handle_speak)
-        bus.on('message', handle_message)
-        bus.on('recognizer_loop:utterance', handle_utterance)
+        #screen = ScreenFace()
+
 
     def run(self):
+        global screen
+        global i
         while True:
             try:
-                print(1)
-            except KeyboardInterrupt as e:
-                # User hit Ctrl+C to quit
-                print("")
+                i = i+1
+                print(i)
+                #screen.contunue_game_loop()
             except KeyboardInterrupt as e:
                 LOG.exception(e)
-                screen.close_window()
+                #screen.close_window()
                 sys.exit()
             finally:
-                time.sleep(0.1)
+                time.sleep(0.3)
 
 
-def start_log_monitor(filename):
-    if os.path.isfile(filename):
-        thread = LogMonitorThread()
-        thread.setDaemon(False)
-        thread.start()
 
+def start_log_monitor():
+    thread = LogMonitorThread()
+    thread.setDaemon(True)
+    thread.start()
