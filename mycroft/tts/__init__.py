@@ -448,6 +448,7 @@ class TTSFactory(object):
     from mycroft.tts.responsive_voice_tts import ResponsiveVoice
     from mycroft.tts.mimic2_tts import Mimic2
     from mycroft.tts.yandex_tts import YandexTTS
+    from mycroft.tts.abk_tts import AbkTTS
 
     CLASSES = {
         "mimic": Mimic,
@@ -460,7 +461,8 @@ class TTSFactory(object):
         "watson": WatsonTTS,
         "bing": BingTTS,
         "responsive_voice": ResponsiveVoice,
-        "yandex": YandexTTS
+        "yandex": YandexTTS,
+        "abk": AbkTTS
     }
 
     @staticmethod
