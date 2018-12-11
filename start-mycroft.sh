@@ -196,7 +196,8 @@ case ${_opt} in
 
     "screendialog")
         launch-all
-        launch-process screendialog
+        launch-background screendialog
+        launch-process cli
         ;;
 
     "cli")
