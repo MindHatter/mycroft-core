@@ -3,6 +3,7 @@ import os
 import time
 
 import pygame
+from pygame.locals import *
 
 client_directory=os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
@@ -11,17 +12,21 @@ class ScreenFace():
     question = ''
     answer = ''
 
+    WIDTH = 1420
+    HEIGHT = 940
+
     def __init__(self):
         pygame.init()
-        size = WIDTH, HEIGHT = (1024, 720)
-        self.screen = pygame.display.set_mode(size)
+        infoObject = pygame.display.Info()
+        size = self.WIDTH, self.HEIGHT = (infoObject.current_w, infoObject.current_h)
+        self.screen = pygame.display.set_mode(size, RESIZABLE)
 
         # Установить заголовок окна
         pygame.display.set_caption('NIKA')
         directory=os.path.dirname(os.path.realpath(__file__))
         #self.avatar = pygame.image.load(directory+'/gorodgeroev.jpg')
         self.clock=pygame.time.Clock()
-        self.font = pygame.font.Font(directory+'/12890.otf', 90)
+        self.font = pygame.font.Font(directory+'/font.otf', 100)
         os.environ["SDL_VIDEODRIVER"] = "x11"
 
     def contunue_game_loop(self):
@@ -64,14 +69,29 @@ class ScreenFace():
         # Тут можно рисовать
         green = (0, 128, 0)   # зеленый
         white = (255, 255, 255)   # белый
+        black = (0, 0, 0)  # белый
+        gray = (27, 28, 31)  # белый
+        blue = (147, 165, 191)
 
         self.screen.fill(white)
         #self.screen.blit(self.avatar, (1, 1))
         # set_question
-        self.blit_text(self.screen, self.question, (100, 100), self.font, green)
-        # set_answer
-        self.blit_text(self.screen, self.answer, (100, 250), self.font, green)
+        rect_x1, rect_y1, rect_x2, rect_y2 = self.blit_text(self.screen, self.question,
+                                                            (self.WIDTH/6, self.HEIGHT/10),
+                                                            self.font, white)
+        self.draw_rect(self.screen, rect_x1, rect_y1, rect_x2, rect_y2, blue)
+        rect_x1, rect_y1, rect_x2, rect_y2 = self.blit_text(self.screen, self.question,
+                                                            (self.WIDTH /6, self.HEIGHT /10),
+                                                            self.font, white)
 
+        # set_answer
+        rect_x1, rect_y1, rect_x2, rect_y2 = self.blit_text(self.screen, self.answer,
+                                                            (self.WIDTH/8, self.HEIGHT/2),
+                                                            self.font, gray)
+        self.draw_rect(self.screen, rect_x1, rect_y1, rect_x2, rect_y2, green)
+        rect_x1, rect_y1, rect_x2, rect_y2 = self.blit_text(self.screen, self.answer,
+                                                            (self.WIDTH /8, self.HEIGHT /2),
+                                                            self.font, gray)
         # Рисунок появится после обновления экрана
         pygame.display.flip()
         self.clock.tick(30)
@@ -81,12 +101,15 @@ class ScreenFace():
         pygame.quit()
         quit()
 
-    def blit_text(self, surface, text, pos, font, color=pygame.Color('black')):
+    def blit_text(self, surface, text, pos, font,
+                  color=pygame.Color('black'),
+                  rect_margin = 10) -> []:
         words = [word.split(' ') for word in text.splitlines()]  # 2D array where each row is a list of words.
         space = font.size(' ')[0]  # The width of a space.
         max_width, max_height = surface.get_size()
         max_width = max_width - pos[0]
-        x, y = pos
+        x, y = start_x, start_y = pos
+        max_x, max_y = 0, 0
         for line in words:
             for word in line:
                 word_surface = font.render(word, 0, color)
@@ -95,9 +118,24 @@ class ScreenFace():
                     x = pos[0]  # Reset the x.
                     y += word_height  # Start on new row.
                 surface.blit(word_surface, (x, y))
+                max_x = max(x+word_width, max_x)
+                max_y = max(y+word_height, max_y)
                 x += word_width + space
             x = pos[0]  # Reset the x.
             y += word_height  # Start on new row.
+
+        return start_x - rect_margin, start_y-rect_margin, max_x-start_x + rect_margin*2, max_y-start_y + rect_margin*2
+
+
+    def draw_rect(self, surface, x, y, width, height, color = pygame.Color('white')):
+        surf1 = pygame.Surface((width, height))
+        surf1.fill(color)  # желтая
+        rect = pygame.Rect([x,
+                            y,
+                           width,
+                           height
+                            ])
+        surface.blit(surf1, rect)
 
 def main():
     lb = ScreenFace()
