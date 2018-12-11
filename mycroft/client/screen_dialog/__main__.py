@@ -26,7 +26,7 @@ class ScreenFace():
         directory=os.path.dirname(os.path.realpath(__file__))
         #self.avatar = pygame.image.load(directory+'/gorodgeroev.jpg')
         self.clock=pygame.time.Clock()
-        self.font = pygame.font.Font(directory+'/font.otf', 100)
+        self.font = pygame.font.Font(directory+'/font.otf', 80)
         os.environ["SDL_VIDEODRIVER"] = "x11"
 
     def contunue_game_loop(self):
@@ -76,22 +76,19 @@ class ScreenFace():
         self.screen.fill(white)
         #self.screen.blit(self.avatar, (1, 1))
         # set_question
-        rect_x1, rect_y1, rect_x2, rect_y2 = self.blit_text(self.screen, self.question,
+        rect_x1, rect_y1, rect_width, rect_height = self.blit_text(self.screen, self.question,
                                                             (self.WIDTH/6, self.HEIGHT/10),
                                                             self.font, white)
-        self.draw_rect(self.screen, rect_x1, rect_y1, rect_x2, rect_y2, blue)
-        rect_x1, rect_y1, rect_x2, rect_y2 = self.blit_text(self.screen, self.question,
-                                                            (self.WIDTH /6, self.HEIGHT /10),
-                                                            self.font, white)
+        self.draw_rect(self.screen, rect_x1, rect_y1, rect_width, rect_height, blue)
+        self.blit_text(self.screen, self.question, (self.WIDTH/6, self.HEIGHT/10), self.font, white)
 
         # set_answer
-        rect_x1, rect_y1, rect_x2, rect_y2 = self.blit_text(self.screen, self.answer,
-                                                            (self.WIDTH/8, self.HEIGHT/2),
+        y2 = rect_height + self.HEIGHT/10 + self.HEIGHT/10
+        rect_x1, rect_y1, rect_width, rect_height = self.blit_text(self.screen, self.answer,
+                                                            (self.WIDTH/8, y2),
                                                             self.font, gray)
-        self.draw_rect(self.screen, rect_x1, rect_y1, rect_x2, rect_y2, green)
-        rect_x1, rect_y1, rect_x2, rect_y2 = self.blit_text(self.screen, self.answer,
-                                                            (self.WIDTH /8, self.HEIGHT /2),
-                                                            self.font, gray)
+        self.draw_rect(self.screen, rect_x1, rect_y1, rect_width, rect_height, green)
+        self.blit_text(self.screen, self.answer, (self.WIDTH /8, y2), self.font, gray)
         # Рисунок появится после обновления экрана
         pygame.display.flip()
         self.clock.tick(30)
