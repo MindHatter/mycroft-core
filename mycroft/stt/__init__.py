@@ -228,17 +228,18 @@ class AbkSTT(TokenSTT):
 
     def execute(self, language=None):
         file = '1.wav'
-        audio = self.record_audio_data(file)
+        self.record_audio_data(file)
         self.lang = language or self.lang
         import requests
 
-        binary_audio_data = open(audio, 'rb').read()
+        binary_audio_data = open(file, 'rb').read()
         abk_url = '***'
         r = requests.post(abk_url+'/stt',
                           data=binary_audio_data,
                           headers={'Content-type': 'audio/wav'})
-        print(r.json())
-        return r.json()
+        text = r.json()['request_text']
+        text = text[0: text.find('\r\n')]
+        return text
 
 
 class STTFactory(object):
