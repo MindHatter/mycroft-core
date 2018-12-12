@@ -1,6 +1,6 @@
 
-from voice_butler.tts import TTS, TTSValidator
-from voice_butler.util.log import LOG
+from mycroft.tts import TTS, TTSValidator
+from mycroft.util.log import LOG
 import base64, requests
 
 class CrtTTS(TTS):
@@ -40,7 +40,7 @@ class CrtTTSValidator(TTSValidator):
 
     def validate_connection(self):
         try:
-            from voice_butler.configuration import Configuration
+            from mycroft.configuration import Configuration
             config = Configuration.get()
             tts = CrtTTS('ru-RU', config)
             tts.get_tts('Привет', tts.filename)
