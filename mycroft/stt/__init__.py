@@ -226,13 +226,12 @@ class AbkSTT(TokenSTT):
     def __init__(self):
         super(AbkSTT, self).__init__()
 
-    def execute(self, language=None):
-        file = '1.wav'
-        self.record_audio_data(file)
+    def execute(self, audio, language=None):
+
         self.lang = language or self.lang
         import requests
 
-        binary_audio_data = open(file, 'rb').read()
+        binary_audio_data = audio.get_wav_data(convert_rate=8000)
         abk_url = '***'
         r = requests.post(abk_url+'/stt',
                           data=binary_audio_data,
