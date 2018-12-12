@@ -11,9 +11,12 @@ class AbkTTS(TTS):
         import requests
         abk_url = '***'
         r = requests.get(abk_url + '/tts', params={'query': sentence, 'voice': self.voice})
-        with open(wav_file, 'wb') as outfile:
-            outfile.write(r.content)
-        LOG.debug('Abk TTS: speech result in "' + wav_file + '"')
+        if r.status_code == 200:
+            with open(wav_file, 'wb') as outfile:
+                outfile.write(r.content)
+            LOG.debug('Abk TTS: speech result in "' + wav_file + '"')
+        else:
+            LOG.error('ABK STT ERROR RESPONSE:'+str(r.json()))
         return (wav_file, None)  # No phonemes
 
 class AbkTTSValidator(TTSValidator):
