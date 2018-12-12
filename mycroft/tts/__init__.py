@@ -441,18 +441,15 @@ class TTSFactory(object):
     from mycroft.tts.fa_tts import FATTS
     from mycroft.tts.google_tts import GoogleTTS
     from mycroft.tts.mary_tts import MaryTTS
-    from mycroft.tts.mimic_tts import Mimic
     from mycroft.tts.spdsay_tts import SpdSay
     from mycroft.tts.bing_tts import BingTTS
     from mycroft.tts.ibm_tts import WatsonTTS
     from mycroft.tts.responsive_voice_tts import ResponsiveVoice
-    from mycroft.tts.mimic2_tts import Mimic2
     from mycroft.tts.yandex_tts import YandexTTS
     from mycroft.tts.abk_tts import AbkTTS
+    from mycroft.tts.crt_tts import CrtTTS
 
     CLASSES = {
-        "mimic": Mimic,
-        "mimic2": Mimic2,
         "google": GoogleTTS,
         "marytts": MaryTTS,
         "fatts": FATTS,
@@ -462,7 +459,8 @@ class TTSFactory(object):
         "bing": BingTTS,
         "responsive_voice": ResponsiveVoice,
         "yandex": YandexTTS,
-        "abk": AbkTTS
+        "abk": AbkTTS,
+        "crt": CrtTTS
     }
 
     @staticmethod
@@ -479,7 +477,7 @@ class TTSFactory(object):
         """
         config = Configuration.get()
         lang = config.get("lang", "en-us")
-        tts_module = 'yandex'#config.get('tts').get('module', 'yandex')
+        tts_module = config.get('tts').get('module', 'crt')
         tts_config = config.get('tts', {}).get(tts_module, {})
         tts_lang = tts_config.get('lang', lang)
         LOG.debug('Init TTS:'+tts_module+'; '+tts_lang)
