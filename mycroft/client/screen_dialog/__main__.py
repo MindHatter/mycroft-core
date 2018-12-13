@@ -44,7 +44,7 @@ class ScreenFace():
     def update_dialog(self):
         try:
             with open(client_directory + '/dialog', 'r') as file:
-                self.dialog = str(file.read()).split('\n')[:-1]
+                self.dialog = str(file.read()).split('#*!')[:-1]
         except Exception as e:
             self.dialog.append(str(e))
 
