@@ -376,8 +376,8 @@ def handle_speak(event):
     global chat
     utterance = event.data.get('utterance')
     utterance = TTS.remove_ssml(utterance)
-    with open(client_directory+'/answer', 'w') as file:
-        file.write(utterance)
+    with open(client_directory+'/dialog', 'a') as file:
+        file.write(">> " +utterance + '\n')
     if bSimple:
         print(">> " + utterance)
     else:
@@ -389,8 +389,8 @@ def handle_utterance(event):
     global chat
     global history
     utterance = event.data.get('utterances')[0]
-    with open(client_directory+'/question', 'w') as file:
-        file.write(utterance)
+    with open(client_directory+'/dialog', 'a') as file:
+        file.write(utterance + '\n')
     history.append(utterance)
     chat.append(utterance)
     set_screen_dirty()

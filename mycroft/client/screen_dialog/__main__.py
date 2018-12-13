@@ -9,8 +9,8 @@ client_directory=os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
 class ScreenFace():
 
-    question = ''
-    answer = ''
+
+    dialog = []
 
     WIDTH = 1420
     HEIGHT = 940
@@ -37,25 +37,15 @@ class ScreenFace():
             except KeyboardInterrupt as e:
                 self.close_window()
 
-    def update_question(self):
+    def update_dialog(self):
         try:
-            with open(client_directory + '/question', 'r') as file:
-                utterance = file.read()
-                self.question = utterance
+            with open(client_directory + '/dialog', 'r') as file:
+                self.dialog = str(file.read()).split('\n')
         except Exception as e:
-            self.question = str(e)
-
-    def update_answer(self):
-        try:
-            with open(client_directory + '/answer', 'r') as file:
-                utterance = file.read()
-                self.answer = utterance
-        except Exception as e:
-            self.answer =str(e)
+            self.dialog.append(str(e))
 
     def refresh(self):
-        self.update_answer()
-        self.update_question()
+        self.update_dialog()
         self.__refresh()
         self.__refresh()
 
@@ -75,20 +65,27 @@ class ScreenFace():
 
         self.screen.fill(white)
         #self.screen.blit(self.avatar, (1, 1))
-        # set_question
-        rect_x1, rect_y1, rect_width, rect_height = self.blit_text(self.screen, self.question,
-                                                            (self.WIDTH/6, self.HEIGHT/10),
-                                                            self.font, white)
-        self.draw_rect(self.screen, rect_x1, rect_y1, rect_width, rect_height, blue)
-        self.blit_text(self.screen, self.question, (self.WIDTH/6, self.HEIGHT/10), self.font, white)
 
-        # set_answer
-        y2 = rect_height + self.HEIGHT/10 + self.HEIGHT/10
-        rect_x1, rect_y1, rect_width, rect_height = self.blit_text(self.screen, self.answer,
-                                                            (self.WIDTH/8, y2),
-                                                            self.font, gray)
-        self.draw_rect(self.screen, rect_x1, rect_y1, rect_width, rect_height, green)
-        self.blit_text(self.screen, self.answer, (self.WIDTH /8, y2), self.font, gray)
+        HEIGHT_PADDING = 40
+        WIDTH_PADDING = 40
+        RECT_PADDING = 5
+        phrase_count = 0
+
+        current_y = self.HEIGHT
+        for phrase in self.dialog[::-1]:
+            phrase_count = phrase_count + 1
+            if not phrase.startswith('>>'):
+                 rect_color = blue
+                 text_color = white
+                  #set_question
+            else:
+                rect_color = green
+                text_color = gray
+                    # set_answer
+            rect_width, rect_height = self.__get_size(self.screen, phrase, WIDTH_PADDING, HEIGHT_PADDING, self.font)
+            current_y = current_y - rect_height - HEIGHT_PADDING
+            self.draw_rect(self.screen, WIDTH_PADDING-RECT_PADDING, current_y-RECT_PADDING, rect_width+2*RECT_PADDING, rect_height+2*RECT_PADDING, rect_color)
+            self.__blit_text(self.screen, phrase, (WIDTH_PADDING, current_y), self.font, text_color, 10, HEIGHT_PADDING)
         # Рисунок появится после обновления экрана
         pygame.display.flip()
         self.clock.tick(30)
@@ -98,9 +95,9 @@ class ScreenFace():
         pygame.quit()
         quit()
 
-    def blit_text(self, surface, text, pos, font,
+    def __blit_text(self, surface, text, pos, font,
                   color=pygame.Color('black'),
-                  rect_margin = 10) -> []:
+                  x_margin = 10, y_margin = 10) -> []:
         words = [word.split(' ') for word in text.splitlines()]  # 2D array where each row is a list of words.
         space = font.size(' ')[0]  # The width of a space.
         max_width, max_height = surface.get_size()
@@ -121,7 +118,29 @@ class ScreenFace():
             x = pos[0]  # Reset the x.
             y += word_height  # Start on new row.
 
-        return start_x - rect_margin, start_y-rect_margin, max_x-start_x + rect_margin*2, max_y-start_y + rect_margin*2
+        return start_x - x_margin, start_y-y_margin, max_x-start_x + x_margin*2, max_y-start_y + y_margin*2
+
+    def __get_size(self, surface, text, x_margin, y_margin, font) -> ():
+        words = [word.split(' ') for word in text.splitlines()]  # 2D array where each row is a list of words.
+        space = font.size(' ')[0]  # The width of a space.
+        max_width, max_height = surface.get_size()
+        max_width = max_width - x_margin
+        x, y = x_margin, y_margin
+        max_x, max_y = 0, 0
+        for line in words:
+            for word in line:
+                word_surface = font.render(word, 0, (0, 0, 0))
+                word_width, word_height = word_surface.get_size()
+                if x + word_width >= max_width:
+                    x = x_margin  # Reset the x.
+                    y += word_height  # Start on new row.
+                max_x = max(x+word_width, max_x)
+                max_y = max(y+word_height, max_y)
+                x += word_width + space
+            x = x_margin  # Reset the x.
+            y += word_height  # Start on new row.
+
+        return (max_x-x_margin, max_y-y_margin)
 
 
     def draw_rect(self, surface, x, y, width, height, color = pygame.Color('white')):
