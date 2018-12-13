@@ -26,8 +26,12 @@ class ScreenFace():
         directory=os.path.dirname(os.path.realpath(__file__))
         #self.avatar = pygame.image.load(directory+'/gorodgeroev.jpg')
         self.clock=pygame.time.Clock()
-        self.font = pygame.font.Font(directory+'/font.otf', 80)
+        self.font = pygame.font.Font(directory+'/font.otf', round(self.HEIGHT/15))
         os.environ["SDL_VIDEODRIVER"] = "x11"
+
+    def __refresh_size(self):
+        infoObject = pygame.display.Info()
+        self.WIDTH, self.HEIGHT = (infoObject.current_w, infoObject.current_h)
 
     def contunue_game_loop(self):
         while True:
@@ -40,12 +44,13 @@ class ScreenFace():
     def update_dialog(self):
         try:
             with open(client_directory + '/dialog', 'r') as file:
-                self.dialog = str(file.read()).split('\n')
+                self.dialog = str(file.read()).split('\n')[:-1]
         except Exception as e:
             self.dialog.append(str(e))
 
     def refresh(self):
         self.update_dialog()
+        self.__refresh_size()
         self.__refresh()
         self.__refresh()
 
@@ -66,12 +71,13 @@ class ScreenFace():
         self.screen.fill(white)
         #self.screen.blit(self.avatar, (1, 1))
 
-        HEIGHT_PADDING = self.HEIGHT/25
+        HEIGHT_PADDING = self.HEIGHT/20
         WIDTH_PADDING = self.WIDTH/25
-        RECT_PADDING = self.HEIGHT/100
-        current_y = self.HEIGHT
+        RECT_PADDING = self.HEIGHT/80
+        current_y = self.HEIGHT - HEIGHT_PADDING
 
         for phrase in self.dialog[::-1]:
+
             if not phrase.startswith('>>'):
                  rect_color = blue
                  text_color = white
@@ -103,7 +109,8 @@ class ScreenFace():
         space = font.size(' ')[0]  # The width of a space.
         max_width, max_height = surface.get_size()
         max_width = max_width - pos[0]
-        x, y = start_x, start_y = pos
+        x, y = pos
+        word_width, word_height = 0, 0
         max_x, max_y = 0, 0
         for line in words:
             for word in line:
@@ -126,6 +133,7 @@ class ScreenFace():
         max_width = max_width - x_margin*2
         x, y = x_margin, y_margin
         max_x, max_y = 0, 0
+        word_width, word_height = 0, 0
         for line in words:
             for word in line:
                 word_surface = font.render(word, 0, (0, 0, 0))
