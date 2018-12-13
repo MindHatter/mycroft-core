@@ -66,26 +66,27 @@ class ScreenFace():
         self.screen.fill(white)
         #self.screen.blit(self.avatar, (1, 1))
 
-        HEIGHT_PADDING = 40
-        WIDTH_PADDING = 40
-        RECT_PADDING = 5
-        phrase_count = 0
-
+        HEIGHT_PADDING = self.HEIGHT/20
+        WIDTH_PADDING = self.WIDTH/20
+        RECT_PADDING = self.HEIGHT/40
         current_y = self.HEIGHT
+
         for phrase in self.dialog[::-1]:
-            phrase_count = phrase_count + 1
             if not phrase.startswith('>>'):
                  rect_color = blue
                  text_color = white
+                 x_phrase_padding = 40
                   #set_question
             else:
                 rect_color = green
                 text_color = gray
+                x_phrase_padding = 20
                     # set_answer
             rect_width, rect_height = self.__get_size(self.screen, phrase, WIDTH_PADDING, HEIGHT_PADDING, self.font)
+            print((rect_width, rect_height))
             current_y = current_y - rect_height - HEIGHT_PADDING
-            self.draw_rect(self.screen, WIDTH_PADDING-RECT_PADDING, current_y-RECT_PADDING, rect_width+2*RECT_PADDING, rect_height+2*RECT_PADDING, rect_color)
-            self.__blit_text(self.screen, phrase, (WIDTH_PADDING, current_y), self.font, text_color, 10, HEIGHT_PADDING)
+            self.draw_rect(self.screen, x_phrase_padding-RECT_PADDING, current_y-RECT_PADDING, rect_width+2*RECT_PADDING, rect_height+2*RECT_PADDING, rect_color)
+            self.__blit_text(self.screen, phrase, (x_phrase_padding, current_y), self.font, text_color, 10, HEIGHT_PADDING)
         # Рисунок появится после обновления экрана
         pygame.display.flip()
         self.clock.tick(30)
