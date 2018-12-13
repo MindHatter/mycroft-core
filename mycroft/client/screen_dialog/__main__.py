@@ -66,27 +66,27 @@ class ScreenFace():
         self.screen.fill(white)
         #self.screen.blit(self.avatar, (1, 1))
 
-        HEIGHT_PADDING = self.HEIGHT/20
-        WIDTH_PADDING = self.WIDTH/20
-        RECT_PADDING = self.HEIGHT/40
+        HEIGHT_PADDING = self.HEIGHT/25
+        WIDTH_PADDING = self.WIDTH/25
+        RECT_PADDING = self.HEIGHT/100
         current_y = self.HEIGHT
 
         for phrase in self.dialog[::-1]:
             if not phrase.startswith('>>'):
                  rect_color = blue
                  text_color = white
-                 x_phrase_padding = 40
+                 x_phrase_padding = 80
                   #set_question
             else:
                 rect_color = green
                 text_color = gray
-                x_phrase_padding = 20
+                x_phrase_padding = 40
                     # set_answer
             rect_width, rect_height = self.__get_size(self.screen, phrase, WIDTH_PADDING, HEIGHT_PADDING, self.font)
-            print((rect_width, rect_height))
+
             current_y = current_y - rect_height - HEIGHT_PADDING
-            self.draw_rect(self.screen, x_phrase_padding-RECT_PADDING, current_y-RECT_PADDING, rect_width+2*RECT_PADDING, rect_height+2*RECT_PADDING, rect_color)
-            self.__blit_text(self.screen, phrase, (x_phrase_padding, current_y), self.font, text_color, 10, HEIGHT_PADDING)
+            self.draw_rect(self.screen, x_phrase_padding-RECT_PADDING, current_y-RECT_PADDING, rect_width+3*RECT_PADDING, rect_height+2*RECT_PADDING, rect_color)
+            self.__blit_text(self.screen, phrase, (x_phrase_padding, current_y), self.font, text_color, WIDTH_PADDING, HEIGHT_PADDING)
         # Рисунок появится после обновления экрана
         pygame.display.flip()
         self.clock.tick(30)
@@ -119,13 +119,11 @@ class ScreenFace():
             x = pos[0]  # Reset the x.
             y += word_height  # Start on new row.
 
-        return start_x - x_margin, start_y-y_margin, max_x-start_x + x_margin*2, max_y-start_y + y_margin*2
-
     def __get_size(self, surface, text, x_margin, y_margin, font) -> ():
         words = [word.split(' ') for word in text.splitlines()]  # 2D array where each row is a list of words.
-        space = font.size(' ')[0]  # The width of a space.
+        space_width = font.size(' ')[0]  # The width of a space.
         max_width, max_height = surface.get_size()
-        max_width = max_width - x_margin
+        max_width = max_width - x_margin*2
         x, y = x_margin, y_margin
         max_x, max_y = 0, 0
         for line in words:
@@ -135,23 +133,22 @@ class ScreenFace():
                 if x + word_width >= max_width:
                     x = x_margin  # Reset the x.
                     y += word_height  # Start on new row.
-                max_x = max(x+word_width, max_x)
-                max_y = max(y+word_height, max_y)
-                x += word_width + space
+                    max_y = max(y, max_y)
+                else:
+                    x += word_width + space_width
+                    max_x = max(x, max_x)
             x = x_margin  # Reset the x.
             y += word_height  # Start on new row.
-
-        return (max_x-x_margin, max_y-y_margin)
+        y -= word_height
+        return (max_x, y)
 
 
     def draw_rect(self, surface, x, y, width, height, color = pygame.Color('white')):
         surf1 = pygame.Surface((width, height))
-        surf1.fill(color)  # желтая
-        rect = pygame.Rect([x,
-                            y,
+        surf1.fill(color)
+        rect = pygame.Rect([x, y,
                            width,
-                           height
-                            ])
+                           height])
         surface.blit(surf1, rect)
 
 def main():
